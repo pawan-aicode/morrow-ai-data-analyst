@@ -102,7 +102,7 @@ The goal is to make data analysis more accessible without hiding the SQL or anal
 Clone the repository:
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/pawan-aicode/morrow-ai-data-analyst.git
 cd ai-data-analyst
 ```
 
