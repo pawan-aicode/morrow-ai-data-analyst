@@ -1,0 +1,28 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.streamlit/secrets.toml
+.env
+.env.*
+!.env.example
+backups/
+*.bak
+*.orig
+*_backup.py
+*_before_*.py
+benchmarks/reports/
+*.backup*
+*.before*
+*.pre_*
+*_before_*.py
+*_tests_before_*.py
+
+# Generated application state
+data/saved_dashboards/
+README-dashboard.md
+
+# Local logs and temporary files
+*.log
+.DS_Store
+data/sales.db

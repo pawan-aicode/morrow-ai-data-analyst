@@ -1,0 +1,242 @@
+[
+  {
+    "id": "B01",
+    "category": "basic",
+    "name": "Total orders",
+    "question": "How many orders are there? Return one column named total_orders.",
+    "reference_sql": "SELECT COUNT(*) AS total_orders FROM orders",
+    "ordered": true
+  },
+  {
+    "id": "B02",
+    "category": "basic",
+    "name": "Completed orders",
+    "question": "How many orders have completed? Return one column named completed_orders.",
+    "reference_sql": "SELECT COUNT(*) AS completed_orders FROM orders WHERE status = 'completed'",
+    "ordered": true
+  },
+  {
+    "id": "B03",
+    "category": "basic",
+    "name": "Cancelled orders",
+    "question": "How many orders are cancelled? Return one column named cancelled_orders.",
+    "reference_sql": "SELECT COUNT(*) AS cancelled_orders FROM orders WHERE status = 'cancelled'",
+    "ordered": true
+  },
+  {
+    "id": "B04",
+    "category": "basic",
+    "name": "Total customers",
+    "question": "How many customers are in the database? Return one column named total_customers.",
+    "reference_sql": "SELECT COUNT(*) AS total_customers FROM customers",
+    "ordered": true
+  },
+  {
+    "id": "B05",
+    "category": "basic",
+    "name": "Total products",
+    "question": "How many products are listed? Return one column named total_products.",
+    "reference_sql": "SELECT COUNT(*) AS total_products FROM products",
+    "ordered": true
+  },
+  {
+    "id": "F01",
+    "category": "filtering",
+    "name": "Orders in 2026",
+    "question": "Count orders placed in 2026. Return one column named orders_2026.",
+    "reference_sql": "SELECT COUNT(*) AS orders_2026 FROM orders WHERE order_date >= '2026-01-01' AND order_date < '2027-01-01'",
+    "ordered": true
+  },
+  {
+    "id": "F02",
+    "category": "filtering",
+    "name": "Completed orders in 2026",
+    "question": "Count completed orders placed in 2026. Return one column named completed_orders_2026.",
+    "reference_sql": "SELECT COUNT(*) AS completed_orders_2026 FROM orders WHERE status = 'completed' AND order_date >= '2026-01-01' AND order_date < '2027-01-01'",
+    "ordered": true
+  },
+  {
+    "id": "F03",
+    "category": "filtering",
+    "name": "Cancelled orders in 2025",
+    "question": "Count cancelled orders placed during 2025. Return one column named cancelled_2025.",
+    "reference_sql": "SELECT COUNT(*) AS cancelled_2025 FROM orders WHERE status = 'cancelled' AND order_date >= '2025-01-01' AND order_date < '2026-01-01'",
+    "ordered": true
+  },
+  {
+    "id": "F04",
+    "category": "filtering",
+    "name": "Orders in Delhi",
+    "question": "Count orders placed by customers from Delhi. Return one column named delhi_orders.",
+    "reference_sql": "SELECT COUNT(*) AS delhi_orders FROM orders o JOIN customers c ON c.customer_id = o.customer_id WHERE c.city = 'Delhi'",
+    "ordered": true
+  },
+  {
+    "id": "F05",
+    "category": "filtering",
+    "name": "Processing or shipped orders",
+    "question": "Count orders whose status is either processing or shipped. Return one column named active_orders.",
+    "reference_sql": "SELECT COUNT(*) AS active_orders FROM orders WHERE status IN ('processing', 'shipped')",
+    "ordered": true
+  },
+  {
+    "id": "A01",
+    "category": "aggregation",
+    "name": "Orders by status",
+    "question": "Count orders for every status. Return status and order_count, highest count first, breaking ties alphabetically by status.",
+    "reference_sql": "SELECT status, COUNT(*) AS order_count FROM orders GROUP BY status ORDER BY order_count DESC, status ASC",
+    "ordered": true
+  },
+  {
+    "id": "A02",
+    "category": "aggregation",
+    "name": "Revenue by order status",
+    "question": "Calculate total line-item revenue for each order status. Revenue is quantity multiplied by unit_price. Return status and revenue, highest revenue first.",
+    "reference_sql": "SELECT o.status, SUM(oi.quantity * oi.unit_price) AS revenue FROM orders o JOIN order_items oi ON oi.order_id = o.order_id GROUP BY o.status ORDER BY revenue DESC, o.status ASC",
+    "ordered": true
+  },
+  {
+    "id": "A03",
+    "category": "aggregation",
+    "name": "Average completed order value",
+    "question": "Calculate the average total value per completed order. First total the line items within each order, then average those order totals. Return one column named average_order_value.",
+    "reference_sql": "WITH order_totals AS (SELECT o.order_id, SUM(oi.quantity * oi.unit_price) AS order_value FROM orders o JOIN order_items oi ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY o.order_id) SELECT AVG(order_value) AS average_order_value FROM order_totals",
+    "ordered": true
+  },
+  {
+    "id": "A04",
+    "category": "aggregation",
+    "name": "Monthly completed revenue",
+    "question": "Calculate completed-order revenue for each month. Return month in YYYY-MM format and revenue, newest month first.",
+    "reference_sql": "SELECT SUBSTR(o.order_date, 1, 7) AS month, SUM(oi.quantity * oi.unit_price) AS revenue FROM orders o JOIN order_items oi ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY SUBSTR(o.order_date, 1, 7) ORDER BY month DESC",
+    "ordered": true
+  },
+  {
+    "id": "A05",
+    "category": "aggregation",
+    "name": "Quantity sold by category",
+    "question": "Calculate the total quantity sold for each product category across all orders. Return category and quantity_sold, highest quantity first.",
+    "reference_sql": "SELECT p.category, SUM(oi.quantity) AS quantity_sold FROM products p JOIN order_items oi ON oi.product_id = p.product_id GROUP BY p.category ORDER BY quantity_sold DESC, p.category ASC",
+    "ordered": true
+  },
+  {
+    "id": "J01",
+    "category": "joins",
+    "name": "Revenue by customer city",
+    "question": "Calculate revenue from completed orders for each customer city. Return city and revenue, highest revenue first.",
+    "reference_sql": "SELECT c.city, SUM(oi.quantity * oi.unit_price) AS revenue FROM customers c JOIN orders o ON o.customer_id = c.customer_id JOIN order_items oi ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY c.city ORDER BY revenue DESC, c.city ASC",
+    "ordered": true
+  },
+  {
+    "id": "J02",
+    "category": "joins",
+    "name": "Product revenue",
+    "question": "Calculate total sales revenue for every product across all order statuses. Return product_id, product_name and revenue, highest revenue first.",
+    "reference_sql": "SELECT p.product_id, p.product_name, SUM(oi.quantity * oi.unit_price) AS revenue FROM products p JOIN order_items oi ON oi.product_id = p.product_id GROUP BY p.product_id, p.product_name ORDER BY revenue DESC, p.product_id ASC",
+    "ordered": true
+  },
+  {
+    "id": "J03",
+    "category": "joins",
+    "name": "Customer order counts",
+    "question": "Show every customer who has placed at least one order. Return customer_id, name and order_count, highest count first and customer_id ascending for ties.",
+    "reference_sql": "SELECT c.customer_id, c.name, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON o.customer_id = c.customer_id GROUP BY c.customer_id, c.name ORDER BY order_count DESC, c.customer_id ASC",
+    "ordered": true
+  },
+  {
+    "id": "J04",
+    "category": "joins",
+    "name": "Order item totals",
+    "question": "For each order, calculate its total line-item value. Return order_id and order_value, highest value first, limited to 10 orders.",
+    "reference_sql": "SELECT order_id, SUM(quantity * unit_price) AS order_value FROM order_items GROUP BY order_id ORDER BY order_value DESC, order_id ASC LIMIT 10",
+    "ordered": true
+  },
+  {
+    "id": "J05",
+    "category": "joins",
+    "name": "Customer latest order date",
+    "question": "Show each customer who has placed an order and their most recent order date. Return customer_id, name and latest_order_date, newest date first.",
+    "reference_sql": "SELECT c.customer_id, c.name, MAX(o.order_date) AS latest_order_date FROM customers c JOIN orders o ON o.customer_id = c.customer_id GROUP BY c.customer_id, c.name ORDER BY latest_order_date DESC, c.customer_id ASC",
+    "ordered": true
+  },
+  {
+    "id": "R01",
+    "category": "ranking",
+    "name": "Top five products by revenue",
+    "question": "Show the top 5 products by total sales revenue across all order statuses. Return product_name and total_sales_revenue, highest first.",
+    "reference_sql": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_sales_revenue FROM order_items oi JOIN products p ON p.product_id = oi.product_id GROUP BY p.product_id, p.product_name ORDER BY total_sales_revenue DESC, p.product_name ASC LIMIT 5",
+    "ordered": true
+  },
+  {
+    "id": "R02",
+    "category": "ranking",
+    "name": "Top ten customers by completed spending",
+    "question": "Find the top 10 customers by revenue from completed orders. Return customer_id, name and total_spending, highest first, breaking ties by customer_id ascending.",
+    "reference_sql": "SELECT c.customer_id, c.name, SUM(oi.quantity * oi.unit_price) AS total_spending FROM customers c JOIN orders o ON o.customer_id = c.customer_id JOIN order_items oi ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY c.customer_id, c.name ORDER BY total_spending DESC, c.customer_id ASC LIMIT 10",
+    "ordered": true
+  },
+  {
+    "id": "R03",
+    "category": "ranking",
+    "name": "Top five customers by order count",
+    "question": "Find the top 5 customers by number of orders. Return customer_id, name and order_count, highest count first, breaking ties by customer_id ascending.",
+    "reference_sql": "SELECT c.customer_id, c.name, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON o.customer_id = c.customer_id GROUP BY c.customer_id, c.name ORDER BY order_count DESC, c.customer_id ASC LIMIT 5",
+    "ordered": true
+  },
+  {
+    "id": "R04",
+    "category": "ranking",
+    "name": "Top categories by revenue",
+    "question": "Rank product categories by total sales revenue across all orders. Return category and revenue, highest first.",
+    "reference_sql": "SELECT p.category, SUM(oi.quantity * oi.unit_price) AS revenue FROM products p JOIN order_items oi ON oi.product_id = p.product_id GROUP BY p.category ORDER BY revenue DESC, p.category ASC",
+    "ordered": true
+  },
+  {
+    "id": "R05",
+    "category": "ranking",
+    "name": "Top three cities by completed revenue",
+    "question": "Find the top 3 customer cities by revenue from completed orders. Return city and revenue, highest first.",
+    "reference_sql": "SELECT c.city, SUM(oi.quantity * oi.unit_price) AS revenue FROM customers c JOIN orders o ON o.customer_id = c.customer_id JOIN order_items oi ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY c.city ORDER BY revenue DESC, c.city ASC LIMIT 3",
+    "ordered": true
+  },
+  {
+    "id": "X01",
+    "category": "advanced",
+    "name": "Cancellation rate",
+    "question": "Calculate the cancellation rate as a percentage of all orders. Return total_orders, cancelled_orders and cancellation_rate_pct, rounded to two decimal places.",
+    "reference_sql": "SELECT COUNT(*) AS total_orders, SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) AS cancelled_orders, ROUND(100.0 * SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) / NULLIF(COUNT(*), 0), 2) AS cancellation_rate_pct FROM orders",
+    "ordered": true
+  },
+  {
+    "id": "X02",
+    "category": "advanced",
+    "name": "Top two customers per city with ties",
+    "question": "For each city, find the top two customers by completed-order revenue. Return city, customer_id, name, revenue and rank_in_city. Use RANK so ties at rank 2 are included. Sort by city, rank_in_city and customer_id.",
+    "reference_sql": "WITH customer_revenue AS (SELECT c.city, c.customer_id, c.name, SUM(oi.quantity * oi.unit_price) AS revenue FROM customers c JOIN orders o ON o.customer_id = c.customer_id JOIN order_items oi ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY c.city, c.customer_id, c.name), ranked AS (SELECT city, customer_id, name, revenue, RANK() OVER (PARTITION BY city ORDER BY revenue DESC) AS rank_in_city FROM customer_revenue) SELECT city, customer_id, name, revenue, rank_in_city FROM ranked WHERE rank_in_city <= 2 ORDER BY city, rank_in_city, customer_id",
+    "ordered": true
+  },
+  {
+    "id": "X03",
+    "category": "advanced",
+    "name": "Products never ordered",
+    "question": "Find products that have never appeared in order_items. Return product_id and product_name, ordered by product_id ascending.",
+    "reference_sql": "SELECT p.product_id, p.product_name FROM products p WHERE NOT EXISTS (SELECT 1 FROM order_items oi WHERE oi.product_id = p.product_id) ORDER BY p.product_id",
+    "ordered": true
+  },
+  {
+    "id": "X04",
+    "category": "advanced",
+    "name": "Monthly revenue comparison",
+    "question": "For completed orders in September and October 2026, return month in YYYY-MM format and revenue, newest month first.",
+    "reference_sql": "SELECT SUBSTR(o.order_date, 1, 7) AS month, SUM(oi.quantity * oi.unit_price) AS revenue FROM orders o JOIN order_items oi ON oi.order_id = o.order_id WHERE o.status = 'completed' AND SUBSTR(o.order_date, 1, 7) IN ('2026-09', '2026-10') GROUP BY SUBSTR(o.order_date, 1, 7) ORDER BY month DESC",
+    "ordered": true
+  },
+  {
+    "id": "X05",
+    "category": "advanced",
+    "name": "Order status percentage",
+    "question": "Calculate the percentage of all orders represented by each status. Return status and percentage_of_orders rounded to two decimal places, highest percentage first.",
+    "reference_sql": "SELECT status, ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM orders), 2) AS percentage_of_orders FROM orders GROUP BY status ORDER BY percentage_of_orders DESC, status ASC",
+    "ordered": true
+  }
+]
