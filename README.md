@@ -114,11 +114,10 @@ root, its intended command is:
 python3 scripts/create_database.py
 ```
 
-The current checked-in file contains malformed non-Python text after its data
-definitions and fails Python syntax validation, so the command does not
-currently complete successfully. Until the script is repaired and validated,
-use a compatible SQLite database that you already control, or repair the
-script separately before running it.
+The generator creates 20 customers, 10 products, 500 orders, and related order
+items using deterministic, synthetic data. It recreates the four tables on each
+run, so rerunning the command does not duplicate records. The generated
+database is ignored by Git and remains local to your checkout.
 
 The dashboard builder can also analyze uploaded CSV and Excel files, so a
 SQLite database is not required for those workflows.
