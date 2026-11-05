@@ -19,29 +19,26 @@ SQL or analytical process. The application includes:
 
 ## Architecture
 
-```text
-                              User
-                               |
-                               v
-                         Streamlit UI
-                         dashboard.py
-                               |
-              +----------------+----------------+
-              |                |                |
-              v                v                v
-          SQL Agent       Dashboard Builder   Sales Intelligence
-          app/agent       app/dashboard_builder app/sales_dashboard
-              |                |                |
-              v                v                +--> Insights
-            Ollama       Data Profiling          +--> Recommendations
-              |                |                +--> Root Cause
-              v                v                +--> Saved Dashboards
-        SQL Validation   Uploaded Files or
-              |          Read-only SQLite
-              +----------------+----------------
-                               |
-                               v
-                    Results and Explanations
+```mermaid
+flowchart TD
+    U[User] --> UI[Streamlit UI<br/>dashboard.py]
+    UI --> SQL[SQL Agent<br/>app/agent]
+    UI --> DB[Dashboard Builder<br/>app/dashboard_builder]
+    UI --> SALES[Sales Intelligence<br/>app/sales_dashboard]
+    SQL --> O[Ollama<br/>qwen3.5:4b-q4_K_M]
+    SQL --> V[SQL Validation]
+    DB --> P[Data Profiling]
+    DB --> INPUT[Uploaded Files<br/>or read-only SQLite]
+    SALES --> I[Insights]
+    SALES --> R[Recommendations]
+    SALES --> RC[Root Cause]
+    SALES --> SD[Saved Dashboards]
+    V --> OUT[Results and Explanations]
+    P --> OUT
+    I --> OUT
+    R --> OUT
+    RC --> OUT
+    SD --> OUT
 ```
 
 ## Technology Stack
@@ -110,11 +107,18 @@ cp /path/to/your/sales.db data/sales.db
 
 The repository also contains
 [`scripts/create_database.py`](scripts/create_database.py), which is intended
-to generate the sample sales database at that same path. The current checked-in
-file contains malformed non-Python text after its data definitions, so it is
-not documented here as a verified runnable command. Until that script is
-repaired and validated, use a compatible SQLite database that you already
-control, or repair the script separately before running it.
+to generate the sample sales database at that same path. From the repository
+root, its intended command is:
+
+```bash
+python3 scripts/create_database.py
+```
+
+The current checked-in file contains malformed non-Python text after its data
+definitions and fails Python syntax validation, so the command does not
+currently complete successfully. Until the script is repaired and validated,
+use a compatible SQLite database that you already control, or repair the
+script separately before running it.
 
 The dashboard builder can also analyze uploaded CSV and Excel files, so a
 SQLite database is not required for those workflows.
