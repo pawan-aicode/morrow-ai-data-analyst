@@ -1,85 +1,48 @@
-# Morrow — AI-Powered Data Analyst
+# Morrow - AI-Powered Data Analyst
 
-A local-first AI analytics application that lets users ask business questions in natural language, generate dashboards, and explore business insights.
+Morrow is a local-first AI analytics application for asking business questions
+in natural language, generating dashboards, and exploring business insights.
+It combines Python, Streamlit, SQLite, and a locally hosted Ollama model.
 
-Built with Python, Streamlit, SQLite, and Ollama.
-
-> **Status:** Active development · Local prototype
+> **Status:** Active development; local prototype
 
 ## Overview
 
-Morrow combines a natural-language SQL agent, interactive dashboard builder, data profiling, and sales intelligence tools in one application.
+Morrow is designed to make data analysis more accessible without hiding the
+SQL or analytical process. The application includes:
 
-The goal is to make data analysis more accessible without hiding the SQL or analytical process from the user.
-
-## Features
-
-### 1. Natural-Language SQL Agent
-- Ask business questions in plain English.
-- Generate SQLite queries using a locally hosted Qwen model.
-- Inspect generated SQL and query results.
-- Receive natural-language explanations.
-- Explore results through tables and visualizations.
-
-### 2. SQL Safety
-- SELECT/WITH-only query validation.
-- Multiple-statement rejection.
-- Read-only SQLite connections.
-- SQLite query-only mode and authorizer restrictions.
-- Query execution time limits.
-- Maximum result-row limits.
-
-### 3. AI Dashboard Builder
-- Read uploaded datasets.
-- Read SQLite databases in read-only mode.
-- Profile dataset columns.
-- Generate and validate dashboard plans.
-- Render data visualizations.
-
-### 4. Sales Intelligence
-- Factual business insights.
-- Monthly comparison analysis.
-- Business evidence calculations.
-- Recommendation generation.
-- Root-cause analysis.
-- Natural-language explanations.
-- Saved dashboard management.
-
-### 5. Interactive Interface
-- Business question interface.
-- Example prompts and quick actions.
-- Results and visual analysis tabs.
-- Sales dashboard.
-- Dashboard save/load controls.
+- A natural-language SQL agent for read-only SQLite analysis.
+- An AI dashboard builder for uploaded datasets and SQLite databases.
+- Sales intelligence features for insights, comparisons, recommendations, and
+  root-cause analysis.
+- Interactive tables, visualizations, and saved dashboard controls.
 
 ## Architecture
 
 ```text
-                  User
-                   |
-                   v
-              Streamlit UI
-              dashboard.py
-                   |
-        +----------+-----------+
-        |          |           |
-        v          v           v
-     SQL Agent  Dashboard   Sales Intelligence
-     app/agent  Builder     app/sales_dashboard
-        |          |           |
-        v          v           +-- Insights
-      Ollama       |           +-- Recommendations
-      Qwen         |           +-- Root Cause
-        |          |           +-- Saved Dashboards
-        v          v
-    SQL Validation  Data Profiling
-        |
-        v
-   Read-only SQLite
-        |
-        v
- Results and Explanation
-
+                              User
+                               |
+                               v
+                         Streamlit UI
+                         dashboard.py
+                               |
+              +----------------+----------------+
+              |                |                |
+              v                v                v
+          SQL Agent       Dashboard Builder   Sales Intelligence
+          app/agent       app/dashboard_builder app/sales_dashboard
+              |                |                |
+              v                v                +--> Insights
+            Ollama       Data Profiling          +--> Recommendations
+              |                |                +--> Root Cause
+              v                v                +--> Saved Dashboards
+        SQL Validation   Uploaded Files or
+              |          Read-only SQLite
+              +----------------+----------------
+                               |
+                               v
+                    Results and Explanations
+```
 
 ## Technology Stack
 
@@ -88,22 +51,22 @@ The goal is to make data analysis more accessible without hiding the SQL or anal
 - Pandas
 - Plotly
 - SQLite
-- Ollama with Qwen 3.5 4B
-- openpyxl for Excel file uploads
+- Ollama with `qwen3.5:4b-q4_K_M`
+- openpyxl for Excel uploads
 
 ## Requirements
 
-- Python 3.12 or compatible version
-- Ollama installed and running
-- The configured Qwen model available locally
+- Python 3.12 or a compatible version.
+- Ollama installed and running locally.
+- The `qwen3.5:4b-q4_K_M` model available in Ollama.
 
 ## Installation
 
-Clone the repository:
+Clone the repository and enter its directory:
 
 ```bash
 git clone https://github.com/pawan-aicode/morrow-ai-data-analyst.git
-cd ai-data-analyst
+cd morrow-ai-data-analyst
 ```
 
 Create and activate a virtual environment:
@@ -113,27 +76,62 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-Install dependencies:
+Install the application dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Pull the configured model:
+Pull the configured Ollama model:
 
 ```bash
 ollama pull qwen3.5:4b-q4_K_M
 ```
 
-Start the application:
+## Database Setup
+
+The sample database is intentionally excluded from GitHub as
+`data/sales.db`. It is local application data and is not part of the published
+repository.
+
+The application expects a compatible SQLite database at:
+
+```text
+data/sales.db
+```
+
+You can provide your own compatible database by creating the `data` directory
+and copying the database to that path:
+
+```bash
+mkdir -p data
+cp /path/to/your/sales.db data/sales.db
+```
+
+The repository also contains
+[`scripts/create_database.py`](scripts/create_database.py), which is intended
+to generate the sample sales database at that same path. The current checked-in
+file contains malformed non-Python text after its data definitions, so it is
+not documented here as a verified runnable command. Until that script is
+repaired and validated, use a compatible SQLite database that you already
+control, or repair the script separately before running it.
+
+The dashboard builder can also analyze uploaded CSV and Excel files, so a
+SQLite database is not required for those workflows.
+
+## Running the Application
+
+From the repository root, with the virtual environment activated:
 
 ```bash
 streamlit run dashboard.py
 ```
 
+The application uses the local Ollama service for SQL generation and analysis.
+
 ## Running Tests
 
-Install development dependencies:
+Install the development dependencies:
 
 ```bash
 pip install -r requirements-dev.txt
@@ -145,17 +143,22 @@ Run the test suite:
 pytest -q
 ```
 
-Latest recorded test result: **178 passed, 27 subtests passed**.
+The latest recorded result is **178 passed, with 27 subtests passed**. This is
+a historical result, not a guarantee for every environment or future change.
 
 ## SQL Benchmark
-The custom benchmark contains 30 questions across six categories: basic queries, filtering, aggregation, joins, ranking, and advanced queries.
+
+The custom benchmark contains 30 questions across six categories: basic
+queries, filtering, aggregation, joins, ranking, and advanced queries.
 
 | Run | Correct | Accuracy |
-|---|---:|---:|
+| --- | ---: | ---: |
 | Initial baseline | 28/30 | 93.33% |
-| After prompt modification | 27/30 | 90.00% |
+| After prompt modification | 27/30 | 90% |
 
-These are results from a small custom benchmark, not a standardized evaluation. Model output can vary between runs.
+The second run was lower than the initial baseline; it should not be read as an
+improvement. These results come from a small custom benchmark, not a
+standardized evaluation. Model output can vary between runs.
 
 ## Limitations
 
@@ -164,9 +167,11 @@ These are results from a small custom benchmark, not a standardized evaluation. 
 - The benchmark contains only 30 test cases.
 - Results depend on the model, prompt, and database schema.
 - The application currently targets a local development environment.
+- No deployment or production hosting configuration is included.
 
 ## Future Improvements
 
+- Repair and validate the sample database-generation script.
 - Expand SQL benchmark coverage.
 - Improve complex join and ranking query generation.
 - Add more dataset formats and profiling capabilities.
