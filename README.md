@@ -146,7 +146,7 @@ Run the test suite:
 pytest -q
 ```
 
-The latest recorded result is **178 passed, with 27 subtests passed**. This is
+The latest recorded result is **180 passed, with 27 subtests passed**. This is
 a historical result, not a guarantee for every environment or future change.
 
 ## SQL Benchmark
@@ -174,7 +174,7 @@ standardized evaluation. Model output can vary between runs.
 
 ## Future Improvements
 
-- Repair and validate the sample database-generation script.
+- Expand database-generation options and sample dataset variety.
 - Expand SQL benchmark coverage.
 - Improve complex join and ranking query generation.
 - Add more dataset formats and profiling capabilities.
