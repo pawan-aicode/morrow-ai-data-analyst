@@ -133,7 +133,7 @@ The second run was lower than the initial baseline; it should not be read as an 
 
 - 📄 Full paper (36 pages): [`paper/Morrow_paper.pdf`](paper/Morrow_paper.pdf)
 - 📄 Short paper (8 pages): [`paper/Morrow_paper_short.pdf`](paper/Morrow_paper_short.pdf)
-- 🔗 Zenodo DOI: https://doi.org/10.5281/zenodo.XXXXXXX
+- 🔗 Zenodo DOI: https://doi.org/10.5281/zenodo.24468390
 - 🗂️ Reproducibility artefacts: [`research/`](research/) — the exact 90-question benchmark (v1, v2, v3), the database generator, all raw model-run reports, the scoring code and tests, and the blind validation reports.
 
 Headline results (v3 benchmark, 90 questions, one synthetic sales database):
