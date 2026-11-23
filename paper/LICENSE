@@ -1,0 +1,13 @@
+# Licence — CC BY 4.0
+
+This material — the Morrow research paper (`paper/`) and the synthetic benchmark and dataset (`research/`) — is licensed under the **Creative Commons Attribution 4.0 International (CC BY 4.0)** licence.
+
+You are free to share and adapt this material for any purpose, even commercially, as long as you give appropriate credit to the author (Pawan, Kurukshetra University), provide a link to the licence, and indicate if changes were made.
+
+Full licence text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Suggested attribution:
+
+> Pawan (2026). *Morrow: Natural-Language-to-SQL with a Small Local LLM on a Synthetic Sales Database — What the Evidence Actually Supports.* Working paper, revision v4. Licensed under CC BY 4.0. DOI: https://doi.org/10.5281/zenodo.XXXXXXX (replace XXXXXXX with the real record number).
+
+Note: the Morrow application source code itself is under the MIT Licence (see the repository root `LICENSE`), not under CC BY 4.0. Third-party content cited in the paper (Spider, BIRD, DIN-SQL, PICARD and other references) remains under its own terms.
