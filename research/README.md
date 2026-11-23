@@ -1,6 +1,6 @@
 # Morrow — Research Artefacts Package (v4, 23 November 2026)
 
-**Published on Zenodo — DOI: https://doi.org/10.5281/zenodo.XXXXXXX** (replace XXXXXXX with the real record number; record: https://zenodo.org/records/XXXXXXX). Publication / Preprint, v4, Open Access, CC BY 4.0, author Pawan (Kurukshetra University). This package is the reproducibility companion to the paper below. The paper (36-page full + 8-page short) is in `../paper/` in the repository and on the Zenodo record.
+**Published on Zenodo — DOI: https://doi.org/10.5281/zenodo.24468390** (record: https://zenodo.org/records/24468390). Publication / Preprint, v4, Open Access, CC BY 4.0, author Pawan (Kurukshetra University). This package is the reproducibility companion to the paper below. The paper (36-page full + 8-page short) is in `../paper/` in the repository and on the Zenodo record.
 
 > Note: in this repository the 105-file artefact package is provided as `research-package-v4.zip` in this folder — a folder-tree upload was not possible in the browser. Extract the zip to get `benchmarks/`, `database/`, `scoring/`, `runs/`, `validation/`, `reports/`, `code_README.md` and `MANIFEST.md`.
 
@@ -41,4 +41,4 @@ This package contains everything needed to check, and to re-run, the results in 
 
 ## Publication
 
-Published on Zenodo — DOI: https://doi.org/10.5281/zenodo.XXXXXXX (replace XXXXXXX with the real record number). All seven approval items are resolved: Pawan approved publication (23 Nov 2026); licences are MIT (code) and CC BY 4.0 (paper, benchmark, dataset); the package lives as `research/` inside the existing Morrow repository; the Zenodo record describes v4; authorship is Pawan only, Kurukshetra University; the v3 run-2 caveat is published as written in the paper; the Ollama serve logs were redacted (proxy credential masked as `***`) and checked — no live credential remains in this package.
+Published on Zenodo — DOI: https://doi.org/10.5281/zenodo.24468390. All seven approval items are resolved: Pawan approved publication (23 Nov 2026); licences are MIT (code) and CC BY 4.0 (paper, benchmark, dataset); the package lives as `research/` inside the existing Morrow repository; the Zenodo record describes v4; authorship is Pawan only, Kurukshetra University; the v3 run-2 caveat is published as written in the paper; the Ollama serve logs were redacted (proxy credential masked as `***`) and checked — no live credential remains in this package.
