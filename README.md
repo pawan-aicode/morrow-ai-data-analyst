@@ -1,20 +1,16 @@
 # Morrow - AI-Powered Data Analyst
 
-Morrow is a local-first AI analytics application for asking business questions
-in natural language, generating dashboards, and exploring business insights.
-It combines Python, Streamlit, SQLite, and a locally hosted Ollama model.
+Morrow is a local-first AI analytics application for asking business questions in natural language, generating dashboards, and exploring business insights. It combines Python, Streamlit, SQLite, and a locally hosted Ollama model.
 
 > **Status:** Active development; local prototype
 
 ## Overview
 
-Morrow is designed to make data analysis more accessible without hiding the
-SQL or analytical process. The application includes:
+Morrow is designed to make data analysis more accessible without hiding the SQL or analytical process. The application includes:
 
 - A natural-language SQL agent for read-only SQLite analysis.
 - An AI dashboard builder for uploaded datasets and SQLite databases.
-- Sales intelligence features for insights, comparisons, recommendations, and
-  root-cause analysis.
+- Sales intelligence features for insights, comparisons, recommendations, and root-cause analysis.
 - Interactive tables, visualizations, and saved dashboard controls.
 
 ## Architecture
@@ -61,61 +57,15 @@ flowchart TD
 ![Live NL-to-SQL answer](screenshots/07-nl-question-answered.png)
 *Live NL-to-SQL answer*
 
-![NL question results table](screenshots/08-nl-question-results.png)
-*NL question results table*
+![Sales intelligence comparison](screenshots/08-sales-intelligence-comparison.png)
+*Sales intelligence comparison*
 
-![Full results table + generated SQL](screenshots/09-nl-question-sql.png)
-*Full results table + generated SQL*
+![Sales intelligence recommendations](screenshots/09-sales-intelligence-recommendations.png)
+*Sales intelligence recommendations*
 
-## Technology Stack
+## Data and Database
 
-- Python 3.12
-- Streamlit
-- Pandas
-- Plotly
-- SQLite
-- Ollama with `qwen3.5:4b-q4_K_M`
-- openpyxl for Excel uploads
-
-## Requirements
-
-- Python 3.12 or a compatible version.
-- Ollama installed and running locally.
-- The `qwen3.5:4b-q4_K_M` model available in Ollama.
-
-## Installation
-
-Clone the repository and enter its directory:
-
-```bash
-git clone https://github.com/pawan-aicode/morrow-ai-data-analyst.git
-cd morrow-ai-data-analyst
-```
-
-Create and activate a virtual environment:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-Install the application dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-Pull the configured Ollama model:
-
-```bash
-ollama pull qwen3.5:4b-q4_K_M
-```
-
-## Database Setup
-
-The sample database is intentionally excluded from GitHub as
-`data/sales.db`. It is local application data and is not part of the published
-repository.
+The sample database is intentionally excluded from GitHub as `data/sales.db`. It is local application data and is not part of the published repository.
 
 The application expects a compatible SQLite database at:
 
@@ -123,30 +73,22 @@ The application expects a compatible SQLite database at:
 data/sales.db
 ```
 
-You can provide your own compatible database by creating the `data` directory
-and copying the database to that path:
+You can provide your own compatible database by creating the `data` directory and copying the database to that path:
 
 ```bash
 mkdir -p data
 cp /path/to/your/sales.db data/sales.db
 ```
 
-The repository also contains
-[`scripts/create_database.py`](scripts/create_database.py), which is intended
-to generate the sample sales database at that same path. From the repository
-root, its intended command is:
+The repository also contains [`scripts/create_database.py`](scripts/create_database.py), which is intended to generate the sample sales database at that same path. From the repository root, its intended command is:
 
 ```bash
 python3 scripts/create_database.py
 ```
 
-The generator creates 20 customers, 10 products, 500 orders, and related order
-items using deterministic, synthetic data. It recreates the four tables on each
-run, so rerunning the command does not duplicate records. The generated
-database is ignored by Git and remains local to your checkout.
+The generator creates 20 customers, 10 products, 500 orders, and related order items using deterministic, synthetic data. It recreates the four tables on each run, so rerunning the command does not duplicate records. The generated database is ignored by Git and remains local to your checkout.
 
-The dashboard builder can also analyze uploaded CSV and Excel files, so a
-SQLite database is not required for those workflows.
+The dashboard builder can also analyze uploaded CSV and Excel files, so a SQLite database is not required for those workflows.
 
 ## Running the Application
 
@@ -172,22 +114,36 @@ Run the test suite:
 pytest -q
 ```
 
-The latest recorded result is **180 passed, with 27 subtests passed**. This is
-a historical result, not a guarantee for every environment or future change.
+The latest recorded result is **210 passed, with 27 subtests passed**. This is a historical result, not a guarantee for every environment or future change.
 
 ## SQL Benchmark
 
-The custom benchmark contains 30 questions across six categories: basic
-queries, filtering, aggregation, joins, ranking, and advanced queries.
+The custom benchmark contains 30 questions across six categories: basic queries, filtering, aggregation, joins, ranking, and advanced queries.
 
 | Run | Correct | Accuracy |
 | --- | ---: | ---: |
 | Initial baseline | 28/30 | 93.33% |
 | After prompt modification | 27/30 | 90% |
 
-The second run was lower than the initial baseline; it should not be read as an
-improvement. These results come from a small custom benchmark, not a
-standardized evaluation. Model output can vary between runs.
+The second run was lower than the initial baseline; it should not be read as an improvement. These results come from a small custom benchmark, not a standardized evaluation. Model output can vary between runs.
+
+## Research Paper
+
+**Morrow: Natural-Language-to-SQL with a Small Local LLM on a Synthetic Sales Database — What the Evidence Actually Supports** — working paper (preprint), revision v4, by Pawan (Kurukshetra University).
+
+- 📄 Full paper (36 pages): [`paper/Morrow_paper.pdf`](paper/Morrow_paper.pdf)
+- 📄 Short paper (8 pages): [`paper/Morrow_paper_short.pdf`](paper/Morrow_paper_short.pdf)
+- 🔗 Zenodo DOI: https://doi.org/10.5281/zenodo.XXXXXXX
+- 🗂️ Reproducibility artefacts: [`research/`](research/) — the exact 90-question benchmark (v1, v2, v3), the database generator, all raw model-run reports, the scoring code and tests, and the blind validation reports.
+
+Headline results (v3 benchmark, 90 questions, one synthetic sales database):
+
+| Model | Run 1 | Run 2 |
+| --- | --- | --- |
+| Qwen 3.5:4b | 79/90 (87.78%) | 79/90 (87.78%), identical |
+| Llama 3.2:3b | 40/90 (44.44%) | 37/90 (41.11%) |
+
+The paper is a system evaluation, not a new NL-to-SQL algorithm: it evaluates Morrow on an author-written benchmark. Every accuracy above is the score on this 90-question benchmark on one synthetic database — not an estimate of accuracy on real business databases, other schemas, or other models. Test suite: 210 passed, 27 subtests passed.
 
 ## Limitations
 
@@ -202,11 +158,8 @@ standardized evaluation. Model output can vary between runs.
 
 - Expand database-generation options and sample dataset variety.
 - Expand SQL benchmark coverage.
-- Improve complex join and ranking query generation.
-- Add more dataset formats and profiling capabilities.
-- Improve error handling and query explanations.
-- Add deployment and production monitoring.
 
 ## License
 
-No open-source license has been selected yet. All rights reserved by default.
+- Morrow source code: [MIT License](LICENSE).
+- Research paper and synthetic benchmark/dataset (`paper/`, `research/`): licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — see `paper/LICENSE` and `research/LICENSE`.
